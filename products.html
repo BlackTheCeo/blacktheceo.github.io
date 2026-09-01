@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>North Star Bakery - Menu</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .wishlist-btn { padding: 8px 12px; cursor: pointer; background-color: #e0e0e0; border: 1px solid #ccc; }
+        .wishlist-btn.active { background-color: #27ae60; color: white; border-color: #27ae60; }
+        .card { list-style: none; margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; width: 300px; }
+    </style>
+</head>
+<link rel="stylesheet" href="style.css">
+<body>
+    <header>
+        <h1 class="site-title">
+  <a href="products.html" style="color: inherit; text-decoration: none;">North Star Bakery</a>
+</h1>
+        <nav>
+            <a href="products.html">Menu</a> | 
+            <a href="contact.html">Pre-Order (<span id="wishlist-badge">0</span>)</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Our Daily Baked Goods</h2>
+        <ul id="bread-category">
+            <li class="card">
+                <h3>36-Hour Sourdough Loaf</h3>
+                <p>Naturally leavened with crisp crust. $8.50</p>
+                <button type="button" class="wishlist-btn" data-id="item-1">+ Add to Pre-Order Wishlist</button>
+            </li>
+            <li class="card">
+                <h3>French Butter Croissant</h3>
+                <p>Flaky, golden-brown layers. $4.25</p>
+                <button type="button" class="wishlist-btn" data-id="item-2">+ Add to Pre-Order Wishlist</button>
+            </li>
+        </ul>
+    </main>
+
+    <script>
+        const menuItems = [
+            { id: "item-1", name: "36-Hour Sourdough Loaf", price: 8.50 },
+            { id: "item-2", name: "French Butter Croissant", price: 4.25 }
+        ];
+
+        let userWishlist = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const stored = localStorage.getItem("bakeryWishlist");
+            if (stored) userWishlist = JSON.parse(stored);
+            
+            updateUI();
+
+            document.querySelectorAll(".wishlist-btn").forEach(button => {
+                const id = button.getAttribute("data-id");
+                
+                if (userWishlist.includes(id)) {
+                    button.textContent = "Saved in Wishlist ✓";
+                    button.classList.add("active");
+                }
+
+                button.addEventListener("click", () => {
+                    const idx = userWishlist.indexOf(id);
+                    if (idx === -1) {
+                        userWishlist.push(id);
+                        button.textContent = "Saved in Wishlist ✓";
+                        button.classList.add("active");
+                    } else {
+                        userWishlist.splice(idx, 1);
+                        button.textContent = "+ Add to Pre-Order Wishlist";
+                        button.classList.remove("active");
+                    }
+                    localStorage.setItem("bakeryWishlist", JSON.stringify(userWishlist));
+                    updateUI();
+                });
+            });
+        });
+
+        function updateUI() {
+            const badge = document.getElementById("wishlist-badge");
+            if (badge) badge.textContent = userWishlist.length;
+        }
+    </script>
+</body>
+</html>
