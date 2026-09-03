@@ -12,38 +12,47 @@
 </head>
 <body>
     <header>
+        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500" alt="Freshly baked sourdough bread">
         <h1>North Star Bakery</h1>
-        <nav>
-            <a href="index.html">Home</a> |
-            <a href="products.html">Menu</a> |
-            <a href="contact.html">Pre-Order (<span id="wishlist-badge">0</span>)</a> |
-            <a href="about.html">About Us</a>
+        <p>Handcrafted Artisan Breads, Pastries & Custom Cakes Baked Daily</p>
+        <nav aria-label="Main Navigation">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Menu</a></li>
+                <li><a href="contact.html">Pre-Order (<span id="wishlist-badge">0</span>)</a></li>
+                <li><a href="about.html">About Us</a></li>
+            </ul>
         </nav>
     </header>
+
     <main>
-        <h2>Pre-Order Request Form</h2>
-        <form id="preorder-form" novalidate>
-            <fieldset>
-                <legend>Pre-Order & Contact Details</legend>
-                <label for="cust-name">Full Name *</label><br>
-                <input type="text" id="cust-name" name="cust-name"><br>
-                <span id="cust-name-error" class="error-msg"></span><br>
+        <section>
+            <h2>Pre-Order Request Form</h2>
+            <form id="preorder-form" novalidate>
+                <fieldset>
+                    <legend>Pre-Order & Contact Details</legend>
+                    <label for="cust-name">Full Name *</label><br>
+                    <input type="text" id="cust-name" name="cust-name"><br>
+                    <span id="cust-name-error" class="error-msg"></span><br>
 
-                <label for="cust-email">Email Address *</label><br>
-                <input type="email" id="cust-email" name="cust-email"><br>
-                <span id="cust-email-error" class="error-msg"></span><br>
+                    <label for="cust-email">Email Address *</label><br>
+                    <input type="email" id="cust-email" name="cust-email"><br>
+                    <span id="cust-email-error" class="error-msg"></span><br>
 
-                <label for="pickup-qty">Total Item Quantity (1-50) *</label><br>
-                <input type="number" id="pickup-qty" name="pickup-qty" min="1" max="50"><br>
-                <span id="pickup-qty-error" class="error-msg"></span><br>
+                    <label for="pickup-qty">Total Item Quantity (1-50) *</label><br>
+                    <input type="number" id="pickup-qty" name="pickup-qty" min="1" max="50"><br>
+                    <span id="pickup-qty-error" class="error-msg"></span><br>
 
-                <button type="submit">Submit Pre-Order Request</button>
-            </fieldset>
-        </form>
+                    <button type="submit">Submit Pre-Order Request</button>
+                </fieldset>
+            </form>
+        </section>
     </main>
+
     <footer>
         <p>&copy; 2026 North Star Bakery. All rights reserved.</p>
     </footer>
+
     <script src="utilities.js"></script>
     <script src="main.js"></script>
 </body>
