@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>North Star Bakery - Pre-Order</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         body { font-family: sans-serif; padding: 20px; }
         .error-msg { color: #c0392b; font-size: 0.85rem; display: block; margin-top: 4px; }
@@ -12,13 +12,10 @@
     </style>
 </head>
 <body>
-    <script src="utilities.js"></script>
-    <script src="main.js"></script>
-<body>
     <header>
         <h1 class="site-title">
-  <a href="products.html" style="color: inherit; text-decoration: none;">North Star Bakery</a>
-</h1>
+            <a href="products.html" style="color: inherit; text-decoration: none;">North Star Bakery</a>
+        </h1>
     </header>
 
     <main>
@@ -36,7 +33,7 @@
                 <span id="cust-email-error" class="error-msg"></span><br>
 
                 <label for="pickup-qty">Total Item Quantity (1-50) *</label><br>
-                <input type="number" id="pickup-qty" name="pickup-qty"><br>
+                <input type="number" id="pickup-qty" name="pickup-qty" min="1" max="50"><br>
                 <span id="pickup-qty-error" class="error-msg"></span><br>
 
                 <button type="submit">Submit Pre-Order Request</button>
@@ -44,6 +41,11 @@
         </form>
     </main>
 
+    <!-- External Scripts -->
+    <script src="utilities.js"></script>
+    <script src="main.js"></script>
+
+    <!-- Inline Form Logic -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const storedWishlist = localStorage.getItem("bakeryWishlist");
@@ -55,27 +57,53 @@
             const form = document.getElementById("preorder-form");
             form.addEventListener("submit", (e) => {
                 e.preventDefault();
-                let valid = true;
-
+                
                 const name = document.getElementById("cust-name");
                 const email = document.getElementById("cust-email");
                 const qty = document.getElementById("pickup-qty");
 
-                if (!name.value.trim()) {
-                    document.getElementById("cust-name-error").textContent = "Please enter your full name (at least 2 characters).";
+                const nameErr = document.getElementById("cust-name-error");
+                const emailErr = document.getElementById("cust-email-error");
+                const qtyErr = document.getElementById("pickup-qty-error");
+
+                // Reset prior errors
+                nameErr.textContent = "";
+                emailErr.textContent = "";
+                qtyErr.textContent = "";
+                name.style.borderColor = "";
+                email.style.borderColor = "";
+                qty.style.borderColor = "";
+
+                let valid = true;
+
+                if (!name.value.trim() || name.value.trim().length < 2) {
+                    nameErr.textContent = "Please enter your full name (at least 2 characters).";
                     name.style.borderColor = "red";
                     valid = false;
                 }
+
                 if (!email.value.includes("@")) {
-                    document.getElementById("cust-email-error").textContent = "Please enter a valid email address.";
+                    emailErr.textContent = "Please enter a valid email address.";
                     email.style.borderColor = "red";
                     valid = false;
                 }
 
+                const qtyVal = parseInt(qty.value, 10);
+                if (isNaN(qtyVal) || qtyVal < 1 || qtyVal > 50) {
+                    qtyErr.textContent = "Please enter a quantity between 1 and 50.";
+                    qty.style.borderColor = "red";
+                    valid = false;
+                }
+
                 if (valid) {
-                    const userData = { name: name.value.trim(), email: email.value.trim() };
+                    const userData = { 
+                        name: name.value.trim(), 
+                        email: email.value.trim(),
+                        quantity: qtyVal
+                    };
                     localStorage.setItem("bakeryUserData", JSON.stringify(userData));
                     alert("Data saved to Local Storage!");
+                    form.reset();
                 }
             });
         });
