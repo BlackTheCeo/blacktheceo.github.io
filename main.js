@@ -1,64 +1,41 @@
 document.addEventListener("DOMContentLoaded", () => {
-    
-    // ==========================================
-    // 1. WISHLIST MANAGEMENT (Runs on all pages)
-    // ==========================================
-    let userWishlist = [];
-    const storedWishlist = localStorage.getItem("bakeryWishlist");
+    // Sync badge counter on load
+    updateWishlistBadge();
 
-    if (storedWishlist) {
-        try {
-            userWishlist = JSON.parse(storedWishlist);
-        } catch (e) {
-            console.error("Error parsing wishlist from localStorage:", e);
-            userWishlist = [];
-        }
-    }
-
-    // Helper to update the navigation badge counter
-    function updateBadge() {
-        const badge = document.getElementById("wishlist-badge");
-        if (badge) {
-            badge.textContent = userWishlist.length;
-        }
-    }
-
-    // Initial badge render on load
-    updateBadge();
-
-    // Attach click listeners to wishlist buttons (if present on products.html)
+    // INTERACTIVE FEATURE: Wishlist Button Toggles (products.html)
     const wishlistButtons = document.querySelectorAll(".wishlist-btn");
-    wishlistButtons.forEach((button) => {
-        const itemId = button.getAttribute("data-id");
+    if (wishlistButtons.length > 0) {
+        let currentWishlist = getWishlist();
 
-        // Set initial button state based on saved wishlist
-        if (userWishlist.includes(itemId)) {
-            button.textContent = "Saved in Wishlist ✓";
-            button.classList.add("active");
-        }
+        wishlistButtons.forEach((button) => {
+            const itemId = button.getAttribute("data-id");
 
-        // Toggle wishlist item on click
-        button.addEventListener("click", () => {
-            const index = userWishlist.indexOf(itemId);
-
-            if (index === -1) {
-                userWishlist.push(itemId);
+            if (currentWishlist.includes(itemId)) {
                 button.textContent = "Saved in Wishlist ✓";
                 button.classList.add("active");
-            } else {
-                userWishlist.splice(index, 1);
-                button.textContent = "+ Add to Pre-Order Wishlist";
-                button.classList.remove("active");
             }
 
-            localStorage.setItem("bakeryWishlist", JSON.stringify(userWishlist));
-            updateBadge();
-        });
-    });
+            button.addEventListener("click", () => {
+                currentWishlist = getWishlist();
+                const index = currentWishlist.indexOf(itemId);
 
-    // ==========================================
-    // 2. FORM VALIDATION (Runs on contact.html)
-    // ==========================================
+                if (index === -1) {
+                    currentWishlist.push(itemId);
+                    button.textContent = "Saved in Wishlist ✓";
+                    button.classList.add("active");
+                } else {
+                    currentWishlist.splice(index, 1);
+                    button.textContent = "+ Add to Pre-Order Wishlist";
+                    button.classList.remove("active");
+                }
+
+                saveWishlist(currentWishlist);
+                updateWishlistBadge();
+            });
+        });
+    }
+
+    // FORM VALIDATION & CLIENT-SIDE STORAGE (contact.html)
     const form = document.getElementById("preorder-form");
     if (form) {
         form.addEventListener("submit", (e) => {
@@ -73,39 +50,39 @@ document.addEventListener("DOMContentLoaded", () => {
             const qtyErr = document.getElementById("pickup-qty-error");
 
             // Reset UI states
-            nameErr.textContent = "";
-            emailErr.textContent = "";
-            qtyErr.textContent = "";
-            name.style.borderColor = "";
-            email.style.borderColor = "";
-            qty.style.borderColor = "";
+            if (nameErr) nameErr.textContent = "";
+            if (emailErr) emailErr.textContent = "";
+            if (qtyErr) qtyErr.textContent = "";
+            if (name) name.style.borderColor = "";
+            if (email) email.style.borderColor = "";
+            if (qty) qty.style.borderColor = "";
 
-            let valid = true;
+            let isValid = true;
 
             // Name validation
-            if (!name.value.trim() || name.value.trim().length < 2) {
-                nameErr.textContent = "Please enter your full name (at least 2 characters).";
-                name.style.borderColor = "red";
-                valid = false;
+            if (!name || !name.value.trim() || name.value.trim().length < 2) {
+                if (nameErr) nameErr.textContent = "Please enter your full name (at least 2 characters).";
+                if (name) name.style.borderColor = "red";
+                isValid = false;
             }
 
             // Email validation
-            if (!email.value.includes("@")) {
-                emailErr.textContent = "Please enter a valid email address.";
-                email.style.borderColor = "red";
-                valid = false;
+            if (!email || !email.value.includes("@")) {
+                if (emailErr) emailErr.textContent = "Please enter a valid email address.";
+                if (email) email.style.borderColor = "red";
+                isValid = false;
             }
 
             // Quantity validation
-            const qtyVal = parseInt(qty.value, 10);
+            const qtyVal = parseInt(qty ? qty.value : "0", 10);
             if (isNaN(qtyVal) || qtyVal < 1 || qtyVal > 50) {
-                qtyErr.textContent = "Please enter a quantity between 1 and 50.";
-                qty.style.borderColor = "red";
-                valid = false;
+                if (qtyErr) qtyErr.textContent = "Please enter a quantity between 1 and 50.";
+                if (qty) qty.style.borderColor = "red";
+                isValid = false;
             }
 
-            // Save user data if valid
-            if (valid) {
+            // Save to Local Storage
+            if (isValid) {
                 const userData = {
                     name: name.value.trim(),
                     email: email.value.trim(),
