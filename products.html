@@ -6,31 +6,24 @@
     <title>North Star Bakery - Menu</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        body { font-family: sans-serif; padding: 20px; }
         .wishlist-btn { padding: 8px 12px; cursor: pointer; background-color: #e0e0e0; border: 1px solid #ccc; }
         .wishlist-btn.active { background-color: #27ae60; color: white; border-color: #27ae60; }
         .card { list-style: none; margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; width: 300px; }
     </style>
 </head>
 <body>
-<header>
-    <h1 class="site-title">
-        <a href="index.html" style="color: inherit; text-decoration: none;">North Star Bakery</a>
-    </h1>
-    <p>Handcrafted Artisan Breads, Pastries & Custom Cakes Baked Daily</p>
-    
-    <nav aria-label="Main Navigation">
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="products.html">Products & Menu</a></li>
-            <li><a href="contact.html">Contact & Pre-Order (<span id="wishlist-badge">0</span>)</a></li>
-            <li><a href="about.html">About Us</a></li>
-        </ul>
-    </nav>
-</header>
+    <header>
+        <h1>North Star Bakery</h1>
+        <nav>
+            <a href="index.html">Home</a> |
+            <a href="products.html">Menu</a> |
+            <a href="contact.html">Pre-Order (<span id="wishlist-badge">0</span>)</a> |
+            <a href="about.html">About Us</a>
+        </nav>
+    </header>
     <main>
         <h2>Our Daily Baked Goods</h2>
-        <ul id="bread-category">
+        <ul>
             <li class="card">
                 <h3>36-Hour Sourdough Loaf</h3>
                 <p>Naturally leavened with crisp crust. $8.50</p>
@@ -43,12 +36,9 @@
             </li>
         </ul>
     </main>
-
     <footer>
         <p>&copy; 2026 North Star Bakery. All rights reserved.</p>
     </footer>
-
-    <!-- External Scripts -->
     <script src="utilities.js"></script>
     <script src="main.js"></script>
 </body>
